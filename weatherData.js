@@ -7,10 +7,10 @@ export class WeatherData {
 }
 
 export const weatherProxyHander = {
-   get: function (target, property) {
+   get: (target, property) => {
       return Reflect.get(target, property)
    },
-   set: function (target, property, value) {
+   set: (target, property, value) => {
       const valueInFer = (value * 1.8 + 32).toFixed(2) + 'F'
       return Reflect.set(target, property, valueInFer)
    },
