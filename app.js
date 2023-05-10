@@ -2,6 +2,7 @@
 import { APP_ID } from './env.js'
 import { ELEMENT_SEARCHED_CITY, ELEMENT_SEARCH_BUTTON } from './elements.js'
 import { Http } from './http.js'
+import { WeatherData, weatherProxyHander } from './weatherData.js'
 
 const searchWeather = () => {
    const cityName = ELEMENT_SEARCHED_CITY.value.trim()
@@ -14,7 +15,17 @@ const searchWeather = () => {
       APP_ID
    console.log('url', url)
    Http.fetchData(url)
-      .then((response) => console.log('res', response))
+      .then((response) => {
+         const weatherData = new WeatherData(
+            cityName,
+            response.weather[0].description.toUpperCase()
+         )
+         const weatherProxy = new Proxy(weatherData, weatherProxyHander)
+         weatherProxy.temperature = response.main.temp
+
+         console.log('res', response)
+         console.log('proxy', weatherProxy)
+      })
       .catch((error) => alert(error))
 }
 
